@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  sleep-api:
+    build: .
+    container_name: sleep-quality-api
+    ports:
+      - "8000:8000"
+    environment:
+      - API_HOST=0.0.0.0
+      - API_PORT=8000
+      - DEBUG=False
+      - WORKERS=4
+      - TIMEOUT=120
+      - MODEL_PATH=/app/models/sleep_model.h5
+    volumes:
+      - ./models:/app/models
+      - ./uploads:/app/uploads
+    restart: unless-stopped
+    networks:
+      - sleep-network
+
+networks:
+  sleep-network:
+    driver: bridge
