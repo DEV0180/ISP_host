@@ -28,7 +28,7 @@ except ImportError:
     vitalsign = None
 
 # ================= CONFIGURATION =================
-API_URL = "http://localhost:8000"  # FastAPI backend URL
+API_URL = os.getenv("API_URL", "http://localhost:8000") # FastAPI backend URL
 UPLOADS_FOLDER = os.path.join(os.path.dirname(__file__), "uploads")
 os.makedirs(UPLOADS_FOLDER, exist_ok=True)
 
