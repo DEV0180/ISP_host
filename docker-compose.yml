@@ -1,21 +1,39 @@
 version: '3.8'
 
 services:
+  # 1. The FastAPI Backend
   sleep-api:
     build: .
     container_name: sleep-quality-api
+    command: sh -c "uvicorn main:app --host 0.0.0.0 --port 8000"
     ports:
       - "8000:8000"
     environment:
-      - API_HOST=0.0.0.0
-      - API_PORT=8000
+      - PORT=8000
       - DEBUG=False
       - WORKERS=4
       - TIMEOUT=120
       - MODEL_PATH=/app/models/sleep_model.h5
     volumes:
       - ./models:/app/models
+    restart: unless-stopped
+    networks:
+      - sleep-network
+
+  # 2. The Flask Frontend (Web UI)
+  sleep-frontend:
+    build: .
+    container_name: sleep-quality-frontend
+    command: sh -c "python app.py"
+    ports:
+      - "8080:8080" # Moved UI to 8080 to prevent conflicts
+    environment:
+      - PORT=8080
+      - API_URL=http://sleep-api:8000 # Tells Flask how to talk to FastAPI within Docker
+    volumes:
       - ./uploads:/app/uploads
+    depends_on:
+      - sleep-api
     restart: unless-stopped
     networks:
       - sleep-network
