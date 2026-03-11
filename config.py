@@ -5,7 +5,9 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Model Configuration
-MODEL_PATH = os.getenv('MODEL_PATH', 'sleep_model.h5')
+
+# This tells it to use the Railway variable, and if it can't find it, default to "sleep_model.h5"
+MODEL_PATH = os.environ.get("MODEL_PATH", "sleep_model.h5") 
 WINDOW_SIZE = int(os.getenv('WINDOW_SIZE', 640))  # 20 Hz * 32 sec
 
 # API Configuration
