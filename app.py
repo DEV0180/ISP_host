@@ -2,7 +2,9 @@
 Sleep Quality Analysis Frontend
 Web interface for collecting radar data and analyzing sleep quality
 """
-
+import os
+import uvicorn
+from fastapi import FastAPI
 import csv
 import datetime
 import json
@@ -387,10 +389,11 @@ def analyze_radar():
         return jsonify({'success': False, 'error': str(e)})
 
 
-# ================= MAIN =================
 if __name__ == "__main__":
     print("Starting Sleep Quality Analysis Frontend")
-    print(f"API Backend: {API_URL}")
-    print(f"Radar Support: {'✓ Available' if RADAR_AVAILABLE else '✗ Not available'}")
-    print("Open browser: http://localhost:5000")
-    app.run(debug=True, port=5000, host="0.0.0.0")
+
+    port = int(os.environ.get("PORT", 8000))
+
+    print(f"Open browser: http://localhost:{port}")
+
+    app.run(host="0.0.0.0", port=port)
